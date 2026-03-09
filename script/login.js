@@ -16,7 +16,7 @@ document.getElementById('login-btn').addEventListener('click', function(){
     const pinCode = inputPin.value;
     // console.log(pinCode);
 
-    if (contactNumber == '01822965616' && pinCode == '1234') {
+    if (contactNumber == '01800000000' && pinCode == '1234') {
         // console.log('Login Success.');
         alert('Login Success.');
 
@@ -38,4 +38,52 @@ document.getElementById('input-pin').addEventListener('keydown', function(event)
     }
 });
 
+
+// ১. মেইন Jobs Container থেকে ক্লিকের লজিক (Clone হবে)
+document.getElementById('jobs-cards').addEventListener('click', function (event) {
+    const card = event.target.closest('.job-card');
+    const interviewBtn = event.target.closest('.interview-btn');
+    const rejectedBtn = event.target.closest('.rejected-btn');
+
+    if (!card) return;
+
+    if (interviewBtn) {
+        // স্ট্যাটাস ও স্টাইল আপডেট
+        updateCardUI(card, 'INTERVIEW', 'green');
+        // ক্লোন করে ইন্টারভিউতে পাঠানো
+        const cardClone = card.cloneNode(true);
+        interviewContainer.appendChild(cardClone);
+    }
+
+    if (rejectedBtn) {
+        updateCardUI(card, 'REJECTED', 'red');
+        // ক্লোন করে রিজেক্টেড-এ পাঠানো
+        const cardClone = card.cloneNode(true);
+        rejectedContainer.appendChild(cardClone);
+    }
+});
+
+// ২. ইন্টারভিউ কন্টেইনার থেকে ক্লিকের লজিক (Move হবে)
+interviewContainer.addEventListener('click', function (event) {
+    const card = event.target.closest('.job-card');
+    const rejectedBtn = event.target.closest('.rejected-btn');
+
+    if (card && rejectedBtn) {
+        // স্ট্যাটাস আপডেট
+        updateCardUI(card, 'REJECTED', 'red');
+        // সরাসরি Move করা (appendChild করলে আগের জায়গা থেকে সরে যায়)
+        rejectedContainer.appendChild(card);
+    }
+});
+
+// ৩. রিজেক্টেড কন্টেইনার থেকেও ইন্টারভিউতে মুভ করার লজিক (অপশনাল)
+rejectedContainer.addEventListener('click', function (event) {
+    const card = event.target.closest('.job-card');
+    const interviewBtn = event.target.closest('.interview-btn');
+
+    if (card && interviewBtn) {
+        updateCardUI(card, 'INTERVIEW', 'green');
+        interviewContainer.appendChild(card);
+    }
+});
 
